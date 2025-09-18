@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gombe State University Map</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: #eaffea;
+            min-height: 100vh;
+            min-width: 100vw;
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+        .main-wrapper {
+            flex: 1 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+        }
+        .container {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+            padding: 2.5em 2em 2em 2em;
+            max-width: 95vw;
+            width: 380px;
+            text-align: center;
+        }
+        .school-name {
+            color: #065c5f;
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 0.3em;
+            letter-spacing: 2px;
+        }
+        .slogan {
+            color: #2e7d32;
+            font-size: 1.1em;
+            margin-bottom: 2em;
+            letter-spacing: 1px;
+        }
+        .instruction {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #065c5f;
+            font-size: 1.07em;
+            margin-bottom: 1.4em;
+            gap: 0.6em;
+        }
+        .emoji {
+            font-size: 1.5em;
+        }
+        .map-btn {
+            background: #92e3a9;
+            color: #065c5f;
+            font-size: 1.12em;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            padding: 0.8em 2.5em;
+            cursor: pointer;
+            box-shadow: 0 2px 10px #0001;
+            transition: background 0.2s, color 0.2s;
+            width: 100%;
+            max-width: 250px;
+        }
+        .map-btn:hover, .map-btn:focus {
+            background: #065c5f;
+            color: #fff;
+            outline: none;
+        }
+        footer {
+            flex-shrink: 0;
+            width: 100%;
+            padding: 18px 0 12px 0;
+            text-align: center;
+            margin-top: auto;
+            background: transparent;
+        }
+        .copyright {
+            color: #2e7d32;
+            font-size: 1em;
+            letter-spacing: 1px;
+            opacity: 0.90;
+        }
+        @media (max-width: 600px) {
+            .container {
+                width: 98vw;
+                min-width: unset;
+                max-width: 99vw;
+                padding: 1.2em 2vw 1.6em 2vw;
+            }
+            .school-name {
+                font-size: 1.18em;
+            }
+            .map-btn {
+                font-size: 1em;
+                padding: 0.7em 1.2em;
+            }
+            .slogan, .copyright {
+                font-size: 0.98em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+      <div class="container">
+          <h1 class="school-name">GOMBE STATE UNIVERSITY</h1>
+          <p class="slogan">Primus Interpares</p>
+          <div class="instruction">
+              <span class="emoji">👇</span> Click the button below for the school map...
+          </div>
+          <a href="https://www.google.com/maps/place/Gombe+State+University,+Gombe/@10.3042082,11.1702616,17z/data=!3m1!4b1!4m6!3m5!1s0x10ffd090fcf7d665:0xd5acb044b580d7da!8m2!3d10.3042082!4d11.1728365!16s%2Fm%2F0cp4mzg?entry=ttu&g_ep=EgoyMDI1MDkxNC4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener">
+              <button class="map-btn">MAP</button>
+          </a>
+      </div>
+    </div>
+    <footer>
+        <span class="copyright">&copy; Aiman Nuruddeen 2025</span>
+    </footer>
+</body>
+</html>
