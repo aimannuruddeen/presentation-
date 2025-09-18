@@ -12,7 +12,13 @@
             --accent-purple: #8f5fd5;
             --btn-hover: #2d1142;
             --container-bg: rgba(255,255,255,0.97);
+            --sidebar-bg: #ece5f7;
+            --legend-bg: #e0d1f1;
+            --event-bg: #f8f2fb;
+            --accessible-bg: #fff;
+            --accessible-text: #111;
         }
+
         html, body {
             height: 100%;
             margin: 0;
@@ -24,30 +30,88 @@
             min-width: 100vw;
             width: 100vw;
             height: 100vh;
-            margin: 0;
-            padding: 0;
             font-family: 'Segoe UI', Arial, sans-serif;
             display: flex;
             flex-direction: column;
+            transition: background 0.3s, color 0.3s;
         }
         .main-wrapper {
             flex: 1 0 auto;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            flex-direction: row;
             min-height: 80vh;
         }
+        .sidebar {
+            width: 240px;
+            background: var(--sidebar-bg);
+            border-right: 2px solid var(--accent-purple);
+            padding: 1.2em 0.7em 1.2em 1.2em;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5em;
+            min-width: 160px;
+        }
+        .sidebar h2 {
+            font-size: 1.15em;
+            color: var(--dark-purple);
+            margin-top: 0;
+        }
+        .locations-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 1em;
+        }
+        .locations-list li {
+            margin-bottom: 0.6em;
+            cursor: pointer;
+            color: var(--accent-purple);
+            border-radius: 8px;
+            padding: 0.25em 0.4em;
+            transition: background 0.2s;
+        }
+        .locations-list li.active, .locations-list li:hover {
+            background: var(--accent-purple);
+            color: #fff;
+        }
+        .legend {
+            background: var(--legend-bg);
+            border-radius: 10px;
+            padding: 0.5em 0.7em;
+            font-size: 0.97em;
+            color: var(--dark-purple);
+        }
+        .legend span {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            margin-right: 0.4em;
+            margin-bottom: -4px;
+            vertical-align: middle;
+        }
+        .marker-admin { background: #d7263d; }
+        .marker-science { background: #2541b2; }
+        .marker-library { background: #8f5fd5; }
+        .marker-hostel { background: #ffb400; }
+        .marker-cafe { background: #22b573; }
+        .marker-other { background: #aaa; }
+        .sidebar .contact, .sidebar .accessibility {
+            font-size: 0.97em;
+            margin-top: 1.4em;
+        }
         .container {
+            flex: 1 1 auto;
             background: var(--container-bg);
             border-radius: 25px;
             box-shadow: 0 6px 36px rgba(75,32,103,0.11);
-            padding: 2.5em 2em 2em 2em;
-            max-width: 99vw;
-            width: 410px;
-            text-align: center;
-            border: 1.5px solid var(--accent-purple);
-            position: relative;
+            margin: 2em auto;
+            padding: 2em 2.3em 2em 2.3em;
+            max-width: 800px;
+            min-width: 320px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .school-name {
             color: var(--dark-purple);
@@ -56,96 +120,209 @@
             margin-bottom: 0.3em;
             letter-spacing: 2px;
             text-shadow: 0 2px 12px #c9b7e0;
+            text-align: center;
         }
         .slogan {
             color: var(--accent-purple);
             font-size: 1.1em;
-            margin-bottom: 2em;
+            margin-bottom: 1.2em;
             letter-spacing: 1.2px;
             font-style: italic;
+            text-align: center;
         }
-        .instruction {
+        .map-section {
+            width: 100%;
+            max-width: 600px;
+            height: 320px;
+            background: linear-gradient(135deg, #e3d6fa 60%, #c1a3e6 100%);
+            border: 2px solid var(--accent-purple);
+            border-radius: 20px;
+            margin-bottom: 1.2em;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 17px #c1a3e630;
+        }
+        .marker {
+            position: absolute;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px #0003;
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-weight: bold;
+            color: #fff;
+            font-size: 1.05em;
+            border: 2px solid #fff;
+            transition: transform 0.2s;
+        }
+        .marker:hover, .marker.active {
+            transform: scale(1.22);
+            z-index: 9;
+        }
+        .marker-label {
+            position: absolute;
+            left: 38px;
+            top: 7px;
+            background: #fff;
             color: var(--dark-purple);
-            font-size: 1.08em;
-            margin-bottom: 1.3em;
-            gap: 0.7em;
+            border-radius: 5px;
+            font-size: 0.95em;
+            padding: 1px 8px;
+            box-shadow: 0 2px 8px #aaa2;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.18s;
+            pointer-events: none;
         }
-        .emoji {
-            font-size: 1.45em;
+        .marker:hover .marker-label, .marker.active .marker-label {
+            opacity: 1;
         }
-        .search-box {
+        .map-controls {
+            position: absolute;
+            right: 14px;
+            bottom: 14px;
             display: flex;
-            justify-content: center;
-            align-items: stretch;
-            gap: 0.4em;
-            margin-bottom: 1.5em;
+            flex-direction: column;
+            gap: 0.5em;
+            z-index: 10;
         }
-        .search-input {
-            flex: 1 1 0;
-            padding: 0.73em 1em;
-            border: 1.3px solid var(--accent-purple);
-            border-radius: 8px 0 0 8px;
-            outline: none;
-            font-size: 1em;
-            color: var(--dark-purple);
-            background: #f8f2fb;
-            transition: border 0.2s;
-        }
-        .search-input:focus {
-            border: 2px solid var(--dark-purple);
-        }
-        .search-btn {
+        .map-btn {
             background: var(--accent-purple);
             color: #fff;
             border: none;
-            border-radius: 0 8px 8px 0;
-            padding: 0.7em 1.4em;
-            font-size: 1em;
-            font-weight: bold;
+            border-radius: 6px;
+            padding: 0.4em 0.7em;
+            font-size: 1.1em;
             cursor: pointer;
+            box-shadow: 0 2px 8px #8f5fd540;
+            margin-bottom: 2px;
             transition: background 0.2s;
-            box-shadow: 0 2px 10px #8f5fd540;
         }
-        .search-btn:hover, .search-btn:focus {
+        .map-btn:hover, .map-btn:focus {
             background: var(--dark-purple);
         }
-        .explore-btn {
+        .directions-section {
+            width: 100%;
+            margin: 0.6em 0 1em 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .directions-form select, .directions-form button {
+            margin-right: 0.7em;
+            margin-bottom: 0.5em;
+            padding: 0.45em 1em;
+            border-radius: 7px;
+            border: 1px solid var(--accent-purple);
+            font-size: 1em;
+        }
+        .directions-result {
+            margin-top: 0.2em;
+            font-size: 0.98em;
+            color: var(--dark-purple);
+            background: #e9e1fa;
+            border-radius: 6px;
+            padding: 0.35em 0.7em;
+        }
+        .gallery-section {
+            width: 100%;
+            margin: 1em 0;
+        }
+        .gallery-grid {
+            display: flex;
+            gap: 0.7em;
+            flex-wrap: wrap;
+            margin-bottom: 0.5em;
+        }
+        .gallery-img {
+            width: 100px;
+            height: 70px;
+            border-radius: 7px;
+            object-fit: cover;
+            border: 2px solid var(--accent-purple);
+            box-shadow: 0 2px 8px #8f5fd520;
+        }
+        .events-section {
+            background: var(--event-bg);
+            border-radius: 12px;
+            padding: 0.7em 1em;
+            width: 100%;
+            margin-bottom: 1em;
+            color: var(--dark-purple);
+        }
+        .events-section ul {
+            padding-left: 1.1em;
+        }
+        .feedback-section {
+            width: 100%;
+            margin-top: 1em;
+            padding: 0.7em 0;
+        }
+        .feedback-section input, .feedback-section textarea {
+            width: 90%;
+            padding: 0.5em;
+            margin-bottom: 0.5em;
+            border: 1px solid var(--accent-purple);
+            border-radius: 5px;
+            font-size: 1em;
+            resize: vertical;
+        }
+        .feedback-section button {
+            background: var(--accent-purple);
+            color: #fff;
+            border: none;
+            border-radius: 7px;
+            padding: 0.5em 1.2em;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        .feedback-section button:hover {
+            background: var(--dark-purple);
+        }
+        .theme-switch {
+            display: flex;
+            gap: 0.5em;
+            margin-bottom: 1em;
+        }
+        .theme-btn {
+            background: #fff;
+            border: 2px solid var(--accent-purple);
+            color: var(--accent-purple);
+            border-radius: 7px;
+            padding: 0.4em 1.2em;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .theme-btn.active, .theme-btn:hover {
+            background: var(--accent-purple);
+            color: #fff;
+        }
+        .explore-btn, .print-btn, .external-link-btn {
             background: var(--dark-purple);
             color: #fff;
-            font-size: 1.12em;
+            font-size: 1.08em;
             font-weight: bold;
             border: none;
             border-radius: 8px;
-            padding: 0.85em 2.8em;
+            padding: 0.7em 2em;
             cursor: pointer;
+            margin: 0.6em 0.2em 0.6em 0;
             box-shadow: 0 2px 12px #4b206722;
             transition: background 0.2s, color 0.2s;
-            width: 100%;
-            max-width: 260px;
-            margin-top: 0.4em;
-            letter-spacing: 1.2px;
+            letter-spacing: 1.1px;
         }
-        .explore-btn:hover, .explore-btn:focus {
+        .explore-btn:hover, .external-link-btn:hover, .print-btn:hover {
             background: var(--accent-purple);
-            color: #fff;
-            outline: none;
         }
         .divider {
-            margin: 1.7em 0 1.5em 0;
+            margin: 1.3em 0 1em 0;
             border: 0;
             border-top: 1.5px solid var(--light-purple);
             width: 80%;
             opacity: 0.5;
-        }
-        .tip {
-            color: var(--accent-purple);
-            font-size: 0.97em;
-            margin-bottom: 0.6em;
-            letter-spacing: 0.7px;
-            opacity: 0.93;
         }
         footer {
             flex-shrink: 0;
@@ -161,61 +338,279 @@
             letter-spacing: 1.2px;
             opacity: 0.94;
         }
+        /* Accessibility - high contrast mode */
+        body.accessible {
+            background: var(--accessible-bg)!important;
+            color: var(--accessible-text)!important;
+        }
+        body.accessible .container,
+        body.accessible .sidebar,
+        body.accessible .legend,
+        body.accessible .events-section {
+            background: #fff !important;
+            color: #000 !important;
+            border-color: #000 !important;
+        }
+        /* Dark theme */
+        body.dark {
+            background: #23102f;
+            color: #f5eeff;
+        }
+        body.dark .container,
+        body.dark .sidebar,
+        body.dark .legend,
+        body.dark .events-section {
+            background: #2c1440 !important;
+            color: #fff !important;
+            border-color: #8f5fd5 !important;
+        }
+        /* Responsive */
+        @media (max-width: 900px) {
+            .main-wrapper {
+                flex-direction: column;
+            }
+            .sidebar {
+                flex-direction: row;
+                width: 100%;
+                min-width: unset;
+                border-right: none;
+                border-bottom: 2px solid var(--accent-purple);
+            }
+            .container {
+                margin: 1em auto;
+                padding: 1.1em 0.2em;
+            }
+            .map-section {
+                height: 220px;
+            }
+            .gallery-img {
+                width: 70px;
+                height: 50px;
+            }
+        }
         @media (max-width: 600px) {
             .container {
-                width: 98vw;
                 min-width: unset;
-                max-width: 99vw;
-                padding: 1.2em 2vw 1.6em 2vw;
+                padding: 1em 0.2em;
             }
-            .school-name {
-                font-size: 1.21em;
-            }
-            .explore-btn, .search-btn {
-                font-size: 1em;
-                padding: 0.7em 1.2em;
-            }
-            .slogan, .copyright {
-                font-size: 0.98em;
+            .sidebar {
+                flex-direction: column;
+                gap: 1em;
+                font-size: 0.97em;
+                padding: 0.5em 0.3em 0.5em 0.7em;
             }
         }
     </style>
 </head>
 <body>
     <div class="main-wrapper">
-      <div class="container">
-          <h1 class="school-name">GOMBE STATE UNIVERSITY</h1>
-          <p class="slogan">Primus Interpares</p>
-          <div class="instruction">
-              <span class="emoji">🔎</span>
-              <span>Search specific places in the university campus or Gombe!</span>
-          </div>
-          <form class="search-box" id="searchForm" autocomplete="off">
-              <input class="search-input" id="searchInput" type="text" placeholder="Search location..." aria-label="Search location" required>
-              <button class="search-btn" type="submit">Search</button>
-          </form>
-          <div class="tip">Tip: Try searching for "Faculty of Science" or "GSU Library"</div>
-          <hr class="divider">
-          <a href="https://www.google.com/maps/place/Gombe+State+University,+Gombe/@10.3042082,11.1702616,17z/data=!3m1!4b1!4m6!3m5!1s0x10ffd090fcf7d665:0xd5acb044b580d7da!8m2!3d10.3042082!4d11.172836" 
-             target="_blank" rel="noopener">
-              <button class="explore-btn" type="button">Explore Map</button>
-          </a>
-      </div>
+        <nav class="sidebar" aria-label="Main campus locations and options">
+            <div>
+                <h2>Locations</h2>
+                <ul class="locations-list" id="locationsList">
+                    <li data-marker="admin">Admin Building</li>
+                    <li data-marker="science">Faculty of Science</li>
+                    <li data-marker="library">Library</li>
+                    <li data-marker="hostel">Hostel</li>
+                    <li data-marker="cafe">Cafeteria</li>
+                    <li data-marker="other">Auditorium</li>
+                </ul>
+            </div>
+            <div class="legend" aria-label="Map legend">
+                <b>Legend:</b><br>
+                <span class="marker marker-admin"></span> Admin<br>
+                <span class="marker marker-science"></span> Science<br>
+                <span class="marker marker-library"></span> Library<br>
+                <span class="marker marker-hostel"></span> Hostel<br>
+                <span class="marker marker-cafe"></span> Cafeteria<br>
+                <span class="marker marker-other"></span> Auditorium
+            </div>
+            <div class="contact">
+                <b>Contact Info:</b>
+                <br>Email: info@gsu.edu.ng
+                <br>Phone: +234-801-234-5678
+                <br>Security: +234-801-999-1111
+            </div>
+            <div class="accessibility">
+                <b>Accessibility:</b>
+                <button id="accessibleBtn" aria-label="Toggle high contrast mode" style="margin-top:0.4em">High Contrast</button>
+            </div>
+        </nav>
+        <main class="container" role="main">
+            <h1 class="school-name">GOMBE STATE UNIVERSITY</h1>
+            <p class="slogan">Primus Interpares</p>
+            <div class="theme-switch" aria-label="Theme switcher">
+                <button class="theme-btn active" data-theme="default">Purple</button>
+                <button class="theme-btn" data-theme="light">Light</button>
+                <button class="theme-btn" data-theme="dark">Dark</button>
+            </div>
+            <section class="map-section" id="mockMap" tabindex="0" aria-label="Interactive campus map">
+                <!-- Markers -->
+                <div class="marker marker-admin" id="marker-admin" style="top:30px; left:60px;" tabindex="0" aria-label="Admin Building">
+                    🏢
+                    <div class="marker-label">Admin Building</div>
+                </div>
+                <div class="marker marker-science" id="marker-science" style="top:120px; left:180px;" tabindex="0" aria-label="Faculty of Science">
+                    🔬
+                    <div class="marker-label">Faculty of Science</div>
+                </div>
+                <div class="marker marker-library" id="marker-library" style="top:70px; left:320px;" tabindex="0" aria-label="Library">
+                    📚
+                    <div class="marker-label">Library</div>
+                </div>
+                <div class="marker marker-hostel" id="marker-hostel" style="top:210px; left:100px;" tabindex="0" aria-label="Hostel">
+                    🏠
+                    <div class="marker-label">Hostel</div>
+                </div>
+                <div class="marker marker-cafe" id="marker-cafe" style="top:170px; left:370px;" tabindex="0" aria-label="Cafeteria">
+                    ☕
+                    <div class="marker-label">Cafeteria</div>
+                </div>
+                <div class="marker marker-other" id="marker-other" style="top:135px; left:500px;" tabindex="0" aria-label="Auditorium">
+                    🎤
+                    <div class="marker-label">Auditorium</div>
+                </div>
+                <!-- Zoom / Pan Controls -->
+                <div class="map-controls">
+                    <button class="map-btn" id="zoomInBtn" aria-label="Zoom in">+</button>
+                    <button class="map-btn" id="zoomOutBtn" aria-label="Zoom out">-</button>
+                </div>
+            </section>
+            <form class="search-box" id="searchForm" autocomplete="off" style="width:90%;max-width:340px;margin:0.2em auto 0.8em;">
+                <input class="search-input" id="searchInput" type="text" placeholder="Search location..." aria-label="Search location" required>
+                <button class="search-btn" type="submit">Search</button>
+            </form>
+            <div class="directions-section">
+                <form class="directions-form" id="directionsForm">
+                    <label for="fromSelect">From: </label>
+                    <select id="fromSelect">
+                        <option>Admin Building</option>
+                        <option>Faculty of Science</option>
+                        <option>Library</option>
+                        <option>Hostel</option>
+                        <option>Cafeteria</option>
+                        <option>Auditorium</option>
+                    </select>
+                    <label for="toSelect">To: </label>
+                    <select id="toSelect">
+                        <option>Admin Building</option>
+                        <option>Faculty of Science</option>
+                        <option>Library</option>
+                        <option>Hostel</option>
+                        <option>Cafeteria</option>
+                        <option>Auditorium</option>
+                    </select>
+                    <button type="submit">Get Directions</button>
+                </form>
+                <div class="directions-result" id="directionsResult"></div>
+            </div>
+            <div class="gallery-section">
+                <b>Campus Gallery</b>
+                <div class="gallery-grid">
+                    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Admin Building" class="gallery-img">
+                    <img src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80" alt="GSU Library" class="gallery-img">
+                    <img src="https://images.unsplash.com/photo-1517520287167-4bbf64a00d66?auto=format&fit=crop&w=400&q=80" alt="Science Faculty" class="gallery-img">
+                    <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80" alt="Student Hostel" class="gallery-img">
+                </div>
+            </div>
+            <div class="events-section">
+                <b>Events & Notices</b>
+                <ul>
+                    <li>Orientation Week: Sept 25 - Sept 29</li>
+                    <li>Library Workshop: Oct 3, 10am</li>
+                    <li>Science Exhibition: Oct 12</li>
+                </ul>
+            </div>
+            <div class="feedback-section">
+                <b>Feedback / Suggestions</b><br>
+                <form id="feedbackForm" autocomplete="off">
+                    <input type="text" id="fbName" placeholder="Your Name" aria-label="Your name">
+                    <textarea id="fbMessage" rows="2" placeholder="Your feedback..." aria-label="Your feedback"></textarea>
+                    <button type="submit">Submit</button>
+                    <span id="fbStatus" style="margin-left:1em;color:var(--accent-purple);font-size:0.98em;"></span>
+                </form>
+            </div>
+            <hr class="divider">
+            <a href="https://www.google.com/maps/place/Gombe+State+University,+Gombe/@10.3042082,11.1702616,17z/data=!3m1!4b1!4m6!3m5!1s0x10ffd090fcf7d665:0xd5acb044b580d7da!8m2!3d10.3042082!4d11.1702616!16s%2Fg%2F11b7v1l1b1?entry=ttu"
+                target="_blank" rel="noopener">
+                <button class="explore-btn" type="button">Explore on Google Maps</button>
+            </a>
+            <button class="external-link-btn" onclick="window.open('https://www.openstreetmap.org/search?query=gombe%20state%20university','_blank')">View on OpenStreetMap</button>
+            <button class="print-btn" onclick="window.print()">Print Map</button>
+        </main>
     </div>
     <footer>
         <span class="copyright">&copy; Aiman Nuruddeen 2025</span>
     </footer>
     <script>
-      // Search form handler
-      document.getElementById('searchForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        var query = document.getElementById('searchInput').value.trim();
-        if(query) {
-          // Google Maps search, centered at Gombe State University for context
-          var url = 'https://www.google.com/maps/search/' + encodeURIComponent(query) + '/@10.3042082,11.1702616,17z';
-          window.open(url, '_blank');
+        // Theme switcher
+        document.querySelectorAll('.theme-btn').forEach(btn=>{
+            btn.addEventListener('click',e=>{
+                document.body.classList.remove('dark','light');
+                document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active'));
+                btn.classList.add('active');
+                if(btn.dataset.theme==='light') document.body.classList.add('light');
+                else if(btn.dataset.theme==='dark') document.body.classList.add('dark');
+            });
+        });
+        // Accessibility
+        document.getElementById('accessibleBtn').onclick = function(){
+            document.body.classList.toggle('accessible');
+        };
+        // Sidebar location click highlights marker
+        document.querySelectorAll('.locations-list li').forEach(li=>{
+            li.onclick=()=>{
+                document.querySelectorAll('.locations-list li').forEach(item=>item.classList.remove('active'));
+                li.classList.add('active');
+                let mark = document.getElementById('marker-'+li.dataset.marker);
+                document.querySelectorAll('.marker').forEach(m=>m.classList.remove('active'));
+                if(mark) { mark.classList.add('active'); mark.focus(); }
+                // Simple "zoom" by scrolling map section to marker (simulated)
+                let map = document.getElementById('mockMap');
+                map.scrollTo({top:0,left:0,behavior:'auto'});
+            }
+        });
+        // Marker click highlights list
+        document.querySelectorAll('.marker').forEach(marker=>{
+            marker.onclick=()=>{
+                document.querySelectorAll('.marker').forEach(m=>m.classList.remove('active'));
+                marker.classList.add('active');
+                let li = document.querySelector('.locations-list li[data-marker="'+marker.id.replace('marker-','')+'"]');
+                document.querySelectorAll('.locations-list li').forEach(item=>item.classList.remove('active'));
+                if(li) li.classList.add('active');
+            }
+        });
+        // Keyboard nav for markers
+        document.querySelectorAll('.marker').forEach(marker=>{
+            marker.addEventListener('keypress',function(e){
+                if(e.key==='Enter'||e.key===' ') marker.click();
+            });
+        });
+        // Search: triggers Google Maps search new tab
+        document.getElementById('searchForm').onsubmit=function(e){
+            e.preventDefault();
+            let q=document.getElementById('searchInput').value.trim();
+            if(q) window.open('https://www.google.com/maps/search/'+encodeURIComponent(q)+'/@10.3042082,11.1702616,17z','_blank');
+        };
+        // Directions: fake route between locations
+        document.getElementById('directionsForm').onsubmit=function(e){
+            e.preventDefault();
+            let from=document.getElementById('fromSelect').value;
+            let to=document.getElementById('toSelect').value;
+            let txt = from===to ? "You are already at "+from+"." : "Walk from "+from+" to "+to+": head north, then east past the Library.";
+            document.getElementById('directionsResult').textContent = txt;
         }
-      });
+        // Zoom (simulate by scaling map, limited)
+        let zoom=1;
+        document.getElementById('zoomInBtn').onclick=function(){zoom=Math.min(zoom+0.15,2.1);document.getElementById('mockMap').style.transform="scale("+zoom+")";}
+        document.getElementById('zoomOutBtn').onclick=function(){zoom=Math.max(zoom-0.15,0.7);document.getElementById('mockMap').style.transform="scale("+zoom+")";}
+        // Feedback
+        document.getElementById('feedbackForm').onsubmit=function(e){
+            e.preventDefault();
+            document.getElementById('fbStatus').textContent="Thanks for your feedback!";
+            this.reset();
+            setTimeout(()=>{document.getElementById('fbStatus').textContent="";},3500);
+        };
     </script>
 </body>
 </html>
